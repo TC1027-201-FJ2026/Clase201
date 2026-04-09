@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')  # Usar backend no interactivo
 import matplotlib.pyplot as plt
 import numpy as np
 

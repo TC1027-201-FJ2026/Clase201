@@ -1,22 +1,13 @@
-# Cálculo del Área de un Triángulo
+# Programa para calcular el área de un triángulo
 
-# Función para calcular el área de un triángulo
-def area_triangulo(base, altura):
-    """
-    Calcula el área de un triángulo usando la fórmula: área = (base * altura) / 2
-    
-    Args:
-        base: La base del triángulo
-        altura: La altura del triángulo
-    
-    Returns:
-        El área del triángulo
-    """
-    return (base * altura) / 2
-
-# Ejemplo de uso
+# Solicitar la base del triángulo
 base = float(input("Ingresa la base del triángulo: "))
+
+# Solicitar la altura del triángulo
 altura = float(input("Ingresa la altura del triángulo: "))
 
-area = area_triangulo(base, altura)
+# Calcular el área
+area = (base * altura) / 2
+
+# Mostrar el resultado
 print(f"El área del triángulo es: {area}")

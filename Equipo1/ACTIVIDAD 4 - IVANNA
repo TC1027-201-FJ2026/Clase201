@@ -13,12 +13,12 @@ def mezclaColores(c1,c2):
      return
     
 #Combinaciones 
-if (c1 == "rojo"and c2 == "azul") or (c1 == "azul" and c1 == "rojo"):
-    print("La mezcla de rojo y azul es morado.")
-elif (c1 == "rojo" and c2 == "amarillo") or (c1 == "amarillo" and c2 == "rojo"):
-    print ("La mezcla de rojo y amarillo es naranja")
-elif (c1 == "azul" and c2 == "amarillo") or (c1 == "amarillo" and c2 =="azul"):
-   print ("La mezcla de azul y amarillo es verde")
+    if (c1 == "rojo" and c2 == "azul") or (c1 == "azul" and c2 == "rojo"):
+        print("La mezcla de rojo y azul es morado.")
+    elif (c1 == "rojo" and c2 == "amarillo") or (c1 == "amarillo" and c2 == "rojo"):
+        print ("La mezcla de rojo y amarillo es naranja.")
+    elif (c1 == "azul" and c2 == "amarillo") or (c1 == "amarillo" and c2 =="azul"):
+       print ("La mezcla de azul y amarillo es verde.")
 
 #Programa principal
 c1,c2 =pideColores()
@@ -42,23 +42,23 @@ def operaciones(op):
       area =  (base * altura) /2
       print(f"El área del triangulo es:{area}")
 
-   if op == 2 :
+   elif op == 2 :
       radio = float (input("Cuál es el radio: "))
       area = math.pi * radio ** 2
-      print(f"El área del circulo con radio {radio} es: {area:}")
+      print(f"El área del circulo con radio {radio} es: {area}")
 
-   if op == 3 :
+   elif op == 3 :
       lado = float(input("Cuál es el lado: "))
       area = lado ** 2
       print(f"El área del cuadrado es: {area}")
 
-   if op == 4 :
+   elif op == 4 :
       base = float(input("Cuál es la base: "))
       altura = float(input("Cuál es la altura: "))
       area = base * altura
       print(f"El área del rectangulo es: {area}")
 
-   if op not in [1, 2, 3, 4]:
+   else:
       print("La respuesta no existe.")
 
 #Programa   Principal
@@ -72,27 +72,28 @@ def pedirNumeros():
    return num
 
 def analisis_de_Numeros(num):
+   num_str = str(num)
    #Elimina el signo negativo si existe
-   if num.startswith("-"):
-      num = num[1:]
+   if num_str.startswith("-"):
+      num_str = num_str[1:]
 
-if not num.isdigit():
-   print("Error: Debe ser número entero.")
-   return
+   if not num_str.isdigit():
+       print("Error: Debe ser número entero.")
+       return
 
-    longitud = len(num_str)
+   longitud = len(num_str)
 
-if longitud == 1:
-   print("El número tiene un digito.")
+   if longitud == 1:
+       print("El número tiene un dígito.")
 
-elif longitud == 2:
-   print("El número tiene dos digitos.")
+   elif longitud == 2:
+       print("El número tiene dos dígitos.")
 
-elif longitud == 3:
-   print("El número tiene tres digitos.")
+   elif longitud == 3:
+       print("El número tiene tres dígitos.")
 
-else:
-   print("El número tiene más de tres digitos.")
+   else:
+       print("El número tiene más de tres dígitos.")
 
 #Programa Principal
 numero = pedirNumeros()

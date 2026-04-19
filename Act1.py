@@ -1,22 +1,47 @@
-# =============================================
-# Programa: Área y Volumen de un Cilindro
-# =============================================
-# Fórmulas:
-# Área total: AT = 2πr(h + r)
-# Volumen: V = πr²h
-import math # Importar módulo math para pi
-# --- Título del programa ---
-print("El área y volumen del cilindro")
-# --- Entrada de datos ---
-# Solicitar el radio y la altura del cilindro
-radio = float(input("Introduzca el radio: "))
-altura = float(input("Introduzca la altura: "))
-# --- Proceso ---
-# Calcular el área total: AT = 2 * π * r * (h + r)
-area = 2 * math.pi * radio * (altura + radio)
-# Calcular el volumen: V = π * r² * h
-volumen = math.pi * radio**2 * altura
-# --- Salida ---
-# Mostrar los resultados
-print("El área del cilindro es:", area)
-print("El volumen del cilindro es:", volumen)
+# Funcion para convertir millas a kilometros
+def kilometros(millas):
+    km = millas * 1.60934
+    print(f"{millas} millas son {round(km,2)} km")
+
+#Funcion para calcular el BMI
+def modyMass():
+    try:
+        peso: float = float(input("Ingrese su peso en kg: "))
+        estatura: float = float(input("Ingrese su estatura en metros: "))
+        bmi = peso / (estatura ** 2)
+        print(f"Su BMI es: {round(bmi,2)}")
+    except ValueError:
+        print("Por favor, ingresa números válidos para peso y estatura.")
+    except ZeroDivisionError:
+        print("La estatura no puede ser cero.")
+# Funcion para calcular el costo del pan de descuento
+
+def pan(barra):
+    precio_fresco: float = 11
+    descuento: float = 0.60
+    precio_descuento = precio_fresco * (1 - descuento)
+    total = precio_descuento * barra
+    print(f"El costo de una barra fresca es de ${precio_fresco}")
+    print(f" El descuento sobre la barra no fresca es de {descuento * 100}%")
+    print(f"El costo total a pagar es de {round(total,2)}")
+
+#Programa principal
+#Funcion para convertir millas a kilometros
+try:
+    millas: float = float(input("Dame las millas que corriste: "))
+    kilometros(millas)
+except ValueError:
+    print("Por favor, ingresa un número válido para las millas.")
+    print("\n")
+#Funcion para calcular el BMI
+try:
+    modyMass()
+except:
+    pass # Already handled inside
+print("\n")
+#Funcion para calcular el costo del pan de descuento
+try:
+    barra = int(input("Ingrese el numero de barras de pan que no son frescas: "))
+    pan(barra)
+except ValueError:
+    print("Por favor, ingresa un número entero válido para las barras.")

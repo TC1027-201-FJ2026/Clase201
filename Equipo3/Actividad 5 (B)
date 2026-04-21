@@ -1,0 +1,21 @@
+from datetime import datetime
+
+mes_actual = datetime.now().month
+n = int(input("n depósitos efectuados en un mes: "))
+total = 0
+conteo = 0
+
+for i in range(n):
+    mes = int(input("mes, importe del depósito: "))
+    importe = float(input())
+    
+    if mes != mes_actual:
+        print("Error en el mes")
+    else:
+        total += importe
+        conteo += 1
+
+print("Total de importes")
+print(f"$ {total:.2f}")
+print("Total de importes del mes en curso")
+print(conteo)

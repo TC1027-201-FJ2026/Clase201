@@ -1,0 +1,13 @@
+import statistics
+
+calificaciones = [95, 92, 85, 88, 83, 72] 
+
+print(f"Mis calificaciones son: {', '.join(map(str, calificaciones))}")
+print(f"Mi promedio es : {statistics.mean(calificaciones):.2f}")
+print(f"La moda de mis calificaciones : {statistics.mode(calificaciones)}")
+print(f"Mi máxima calificación que obtuve fue: {max(calificaciones)}")
+print(f"Mi mínima calificación que obtuve fue: {min(calificaciones)}")
+print(f"La desviación de mis notas fue: {statistics.stdev(calificaciones):.1f}")
+print(f"Obtuve {calificaciones.count(100)} calificaciones de: 100")
+print(f"Obtuve {calificaciones.count(70)} calificaciones de: 70")
+print("Conclusión: Mi desempeño fue consistente, con mayoría de calificaciones altas.")

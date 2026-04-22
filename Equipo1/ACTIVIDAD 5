@@ -1,0 +1,80 @@
+# Ejercicio a)
+# Programa para calcular el total a pagar de una compra con n artículos usando while
+
+n = int(input("n artículos seleccionados: "))
+
+contador = 0
+total = 0.0
+
+while contador < n:
+    nombre = input("nombre del artículo: ")
+    precio = float(input("precio: "))
+    total += precio
+    contador += 1
+
+print("Total a pagar")
+print("$", total)
+
+# Ejercicio b)
+# Programa para acumular depósitos del mes en curso usando while
+
+from datetime import datetime
+
+n = int(input("n depósitos efectuados en un mes: "))
+
+mes_en_curso = datetime.now().month
+
+contador = 0
+total_importes = 0.0
+depositos_correctos = 0
+
+while contador < n:
+    mes = int(input("mes: "))
+    importe = float(input("importe del depósito: "))
+
+    total_importes += importe
+
+    if mes == mes_en_curso:
+        depositos_correctos += 1
+    else:
+        print("Error en el mes")
+
+    contador += 1
+
+print("Total de importes")
+print("$", total_importes)
+print("Total de depósitos correctos del mes en curso")
+print(depositos_correctos)
+
+# Ejercicio c)
+# Programa para identificar cuántos clientes son mayores de edad,
+# cuántos son foráneos y cuántos son locales usando while
+
+n = int(input("n clientes: "))
+
+contador = 0
+mayores_edad = 0
+foraneos = 0
+locales = 0
+
+while contador < n:
+    edad = int(input("edad: "))
+    ciudad = input("ciudad: ").strip().lower()
+
+    if edad >= 18:
+        mayores_edad += 1
+
+    if ciudad == "local":
+        locales += 1
+    else:
+        foraneos += 1
+
+    contador += 1
+
+print("Total de clientes mayores de edad")
+print(mayores_edad)
+print("Total de clientes foráneos")
+print(foraneos)
+print("Total de clientes locales")
+print(locales)
+

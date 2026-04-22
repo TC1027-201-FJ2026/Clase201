@@ -1,0 +1,59 @@
+import statistics
+
+calificaciones = [100,90,87,88,100,70]
+print("Mis calificaciones son: ", calificaciones)
+
+#Promedio
+promedio = sum(calificaciones) / len(calificaciones)
+print("Mi promedio es: ", promedio)
+
+#Moda
+moda = statistics.mode(calificaciones)
+print("Mi moda es: ",moda)
+
+#Máximo
+print("Mi calificación máxima es : ", max(calificaciones))
+
+#Mínimo
+print("Mi calificación mínima es : ", min(calificaciones))
+
+#Desviacion Estándar
+desviacion_estandar = statistics.stdev(calificaciones)
+print("Mi desviacion estandar es: ", desviacion_estandar)
+
+#Conteos
+print("Obtuve",calificaciones.count(100), "calificaciones de 100")
+print("Obtuve",calificaciones.count(70), "calificaciones de 70")
+
+#Conclusiones
+print("Mis calificaciones son buenas,ya que mi promedio es alto porque tengo varias calificaciones del 100,comoquiera tambien he tenido calificaciones bajas como 70)")
+print("por lo cual es hacen que varie mi promedio general,por lo cual es importante seguir estudiando y esforzarme mas.")
+
+#Ejercicio 2
+
+import matplotlib.pyplot as plt
+
+#Lista de productos
+productos = ["Laptop", "Mouse", "Teclado", "Monitor", "Audifonos"]
+
+#Precios
+precios = [15000, 500, 800, 3000, 1200]
+
+#Ventas
+ventas = [10,50,30,20,25]
+
+#Grafica de precios
+plt.figure()
+plt.bar(productos,precios)
+plt.title("Precios de productos")
+plt.xlabel("Productos")
+plt.ylabel("Precio (MXN)")
+plt.show()
+
+#Grafica de ventas
+plt.figure()
+plt.plot(productos,ventas,marker="o")
+plt.title("Ventas de productos")
+plt.xlabel("Productos")
+plt.ylabel(" Cantidad Vendida")
+plt.show()

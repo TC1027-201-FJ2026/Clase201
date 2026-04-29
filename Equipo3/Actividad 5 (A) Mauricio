@@ -1,0 +1,10 @@
+n = int(input("n artículos seleccionados: "))
+total = 0
+
+for i in range(n):
+    nombre = input("nombre del artículo, precio: ")
+    precio = float(input())
+    total += precio
+
+print("Total a pagar")
+print(f"$ {total:.2f}")

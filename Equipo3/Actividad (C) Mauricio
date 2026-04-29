@@ -1,0 +1,25 @@
+ciudad_local = "Monterrey"  # cambia por tu ciudad local
+
+n = int(input("n clientes: "))
+mayores = 0
+foraneos = 0
+locales = 0
+
+for i in range(n):
+    edad = int(input("edad, ciudad: "))
+    ciudad = input()
+    
+    if edad >= 18:
+        mayores += 1
+    
+    if ciudad.lower() == ciudad_local.lower():
+        locales += 1
+    else:
+        foraneos += 1
+
+print("Total de clientes mayores de edad")
+print(mayores)
+print("Total de clientes foráneos")
+print(foraneos)
+print("Total de clientes locales")
+print(locales)

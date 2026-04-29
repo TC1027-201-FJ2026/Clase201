@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+
+# Datos
+productos = ["Leche", "Pan", "Huevo", "Refresco", "Agua"]
+precios   = [25, 18, 45, 22, 12]
+ventas    = [150, 200, 120, 180, 90]
+
+# Gráfica 1 — Precios (barras de colores)
+fig1, ax1 = plt.subplots()
+barras = ax1.bar(productos, precios, color=["steelblue","tomato","gold","mediumseagreen","orchid"])
+ax1.set_title("Precio de productos principales")
+ax1.set_xlabel("Producto")
+ax1.set_ylabel("Precio ($)")
+ax1.legend(barras, productos, title="Productos")
+plt.tight_layout()
+plt.show()
+
+# Gráfica 2 — Ventas (línea con puntos)
+fig2, ax2 = plt.subplots()
+ax2.plot(productos, ventas, marker="o", color="darkorange", linewidth=2, markersize=8)
+ax2.set_title("Ventas de productos principales")
+ax2.set_xlabel("Producto")
+ax2.set_ylabel("Unidades vendidas")
+ax2.legend(["Ventas"], title="Indicador")
+plt.tight_layout()
+plt.show()

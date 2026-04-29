@@ -1,0 +1,45 @@
+import pandas as pd
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+#Cargar archivo excel
+df = pd.read_excel("ChartData.xlsx")
+
+#Convertidor de columna Date a formato de fecha
+df["Date"] = pd.to_datetime(df["Date"])
+
+#Ordenar por fechas (en caso de que no esté ordenado)
+df = df.sort_values(by="Date")
+
+#GRÁFICA 1 Precio de Cierre
+plt.figure()
+plt.plot(df["Date"], df["Close/Price"])
+plt.title("Evolución del Precio de las acciones de United")
+plt.xlabel("Fecha")
+plt.ylabel("Precio (USD)")
+plt.xticks(rotation=45) 
+plt.tight_layout()
+plt.savefig('grafica1.png')
+# plt.show()
+
+#GRÁFICA 2 Volumen por mes de las acciones de United
+#Crear columna de mes
+df["Month"] =df["Date"].dt.to_period("M")
+
+#Agrupar por mes y sumar el volumen
+volumen_mensual = df.groupby("Month")["Volume"].sum()
+
+#Convertir a string para graficar
+volumen_mensual.index =volumen_mensual.index.astype(str)
+
+plt.figure()
+plt.bar(volumen_mensual.index, volumen_mensual.values)
+plt.title("Volumen Mensual de las transacciones de acciones de United")
+plt.xlabel("Mes")
+plt.ylabel("Volumen")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('grafica2.png')
+# plt.show()

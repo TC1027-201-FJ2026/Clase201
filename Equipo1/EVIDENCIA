@@ -36,6 +36,7 @@ def grafica_gerente():
     plt.title("Ganacia por Gerente")
     plt.xlabel("Gerente")
     plt.ylabel("Ganancia")  
+    plt.tight_layout()
     plt.savefig("ganancia_gerente.png")
     plt.close()          
 
@@ -45,6 +46,7 @@ def grafica_devoluciones():
     plt.title("Porcentaje de Devoluciones por Región")
     plt.xlabel("Región")
     plt.ylabel("Proporción de Devolucines")
+    plt.tight_layout()
     plt.savefig("devoluciones_region.png")
     plt.close()
 
@@ -54,6 +56,7 @@ def grafica_impacto():
     plt.title("Impacto de Devoluciones en Ganancias")
     plt.xlabel("Devolución (0=No, 1=Sí")
     plt.ylabel("Ganancia Promedio")
+    plt.tight_layout()
     plt.savefig("impacto_devoluciones.png")
     plt.close()   
 
@@ -63,6 +66,7 @@ def grafica_variabilidad():
     plt.title("Variabilidad de Ventas por Gerente")
     plt.xlabel("Gerente")
     plt.ylabel("Desviación Estándar")
+    plt.tight_layout()
     plt.savefig("variabilidad_ventas_gerente.png")
     plt.close()   
 

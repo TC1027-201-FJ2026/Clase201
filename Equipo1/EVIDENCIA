@@ -1,0 +1,80 @@
+import pandas as pd # type: ignore
+import matplotlib.pyplot as plt # type: ignore
+
+#Leer el archivo de excel
+orders = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="Orders")
+people = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="People")
+returns = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="Returns")
+
+#Unir Datos
+#Unir orders con people por Región
+df = pd.merge(orders,people, on="Region")
+
+#Agregar la columna de Devoluciones
+returns["Returned"] = 1
+df = pd.merge(df,returns, on="Order ID", how="left")
+df["Returned"] = df["Returned"].fillna(0)
+
+#Funciones
+def estadisticas():
+    print("Estadistica descriptiva:")
+    print("Ventas:")
+    print("Media:",orders["Sales"].mean())
+    print("Mediana:",orders["Sales"].median())
+    print("Moda:",orders["Sales"].mode()[0])
+    print("Desviación Estándar:",orders["Sales"].std())
+
+    print("Ganancias:")
+    print("Media:",df["Profit"].mean())
+    print("Mediana:",df["Profit"].median())
+    print("Moda:",df["Profit"].mode()[0])
+    print("Desviación Estándar:",df["Profit"].std())
+
+def grafica_gerente():
+    data = df.groupby("Person")["Profit"].sum()
+    data.plot(kind="bar")
+    plt.title("Ganacia por Gerente")
+    plt.xlabel("Gerente")
+    plt.ylabel("Ganancia")  
+    plt.savefig("ganancia_gerente.png")
+    plt.close()          
+
+def grafica_devoluciones():
+    data = df.groupby("Region")["Returned"].mean()
+    data.plot(kind="bar")
+    plt.title("Porcentaje de Devoluciones por Región")
+    plt.xlabel("Región")
+    plt.ylabel("Proporción de Devolucines")
+    plt.savefig("devoluciones_region.png")
+    plt.close()
+
+def grafica_impacto():
+    data = df.groupby("Returned")["Profit"].mean()
+    data.plot(kind="bar")
+    plt.title("Impacto de Devoluciones en Ganancias")
+    plt.xlabel("Devolución (0=No, 1=Sí")
+    plt.ylabel("Ganancia Promedio")
+    plt.savefig("impacto_devoluciones.png")
+    plt.close()   
+
+def grafica_variabilidad():
+    data = df.groupby("Person")["Sales"].std()
+    data.plot(kind="bar")
+    plt.title("Variabilidad de Ventas por Gerente")
+    plt.xlabel("Gerente")
+    plt.ylabel("Desviación Estándar")
+    plt.savefig("variabilidad_ventas_gerente.png")
+    plt.close()   
+
+if __name__ == "__main__":
+    estadisticas()
+    grafica_gerente()
+    grafica_devoluciones()
+    grafica_impacto()
+    grafica_variabilidad()
+    print("Gráficas guardadas como PNG.")
+
+#Simulador   
+df["Returned_simulado"] =  df["Returned"] * 0.9
+impacto = df.groupby("Returned_simulado")["Profit"].mean()
+print(impacto)

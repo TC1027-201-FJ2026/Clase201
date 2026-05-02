@@ -1,4 +1,4 @@
-import os
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -6,17 +6,36 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-# Determinar la ruta del archivo Excel en la misma carpeta que este script
+parser = argparse.ArgumentParser(
+    description="Generar gráficas de precio de cierre y volumen mensual desde un archivo Excel."
+)
+parser.add_argument(
+    '--input',
+    type=Path,
+    default=None,
+    help='Ruta al archivo Excel. Por defecto usa ChartData.xlsx en la misma carpeta que este script.'
+)
+parser.add_argument(
+    '--output-dir',
+    type=Path,
+    default=None,
+    help='Carpeta donde se guardarán las gráficas. Por defecto usa la carpeta del script.'
+)
+args = parser.parse_args()
+
 script_dir = Path(__file__).resolve().parent
-excel_path = script_dir / "ChartData.xlsx"
+excel_path = args.input if args.input is not None else script_dir / "ChartData.xlsx"
+output_dir = args.output_dir if args.output_dir is not None else script_dir
 
 if not excel_path.exists():
     raise FileNotFoundError(
         f"No se encontró el archivo de datos: {excel_path}. "
-        "Coloca ChartData.xlsx en la misma carpeta que ACTIVIDAD 7."
+        "Coloca ChartData.xlsx en la misma carpeta que ACTIVIDAD 7 o usa --input <ruta>."
     )
 
-# Cargar archivo Excel
+if not output_dir.exists():
+    output_dir.mkdir(parents=True, exist_ok=True)
+
 required_columns = {"Date", "Close/Price", "Volume"}
 df = pd.read_excel(excel_path)
 missing_columns = required_columns - set(df.columns)
@@ -30,7 +49,7 @@ df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 if df["Date"].isna().any():
     raise ValueError("Hay valores de fecha inválidos en la columna 'Date'.")
 
-# Ordenar por fechas (en caso de que no esté ordenado)
+# Ordenar por fechas
 df = df.sort_values(by="Date")
 
 # GRÁFICA 1: Precio de Cierre
@@ -41,17 +60,12 @@ plt.xlabel("Fecha")
 plt.ylabel("Precio (USD)")
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig(script_dir / 'grafica1.png', dpi=300)
+plt.savefig(output_dir / 'grafica1.png', dpi=300)
 plt.close()
 
-# GRÁFICA 2: Volumen por mes de las acciones de United
-# Crear columna de mes
+# GRÁFICA 2: Volumen por mes
 df["Month"] = df["Date"].dt.to_period("M")
-
-# Agrupar por mes y sumar el volumen
 volumen_mensual = df.groupby("Month")["Volume"].sum()
-
-# Convertir a string para graficar
 volumen_mensual.index = volumen_mensual.index.astype(str)
 
 plt.figure()
@@ -61,5 +75,5 @@ plt.xlabel("Mes")
 plt.ylabel("Volumen")
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig(script_dir / 'grafica2.png', dpi=300)
+plt.savefig(output_dir / 'grafica2.png', dpi=300)
 plt.close()

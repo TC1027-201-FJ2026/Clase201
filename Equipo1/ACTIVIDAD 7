@@ -1,38 +1,58 @@
-import pandas as pd
+import os
+from pathlib import Path
 
+import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-#Cargar archivo excel
-df = pd.read_excel("ChartData.xlsx")
+# Determinar la ruta del archivo Excel en la misma carpeta que este script
+script_dir = Path(__file__).resolve().parent
+excel_path = script_dir / "ChartData.xlsx"
 
-#Convertidor de columna Date a formato de fecha
-df["Date"] = pd.to_datetime(df["Date"])
+if not excel_path.exists():
+    raise FileNotFoundError(
+        f"No se encontró el archivo de datos: {excel_path}. "
+        "Coloca ChartData.xlsx en la misma carpeta que ACTIVIDAD 7."
+    )
 
-#Ordenar por fechas (en caso de que no esté ordenado)
+# Cargar archivo Excel
+required_columns = {"Date", "Close/Price", "Volume"}
+df = pd.read_excel(excel_path)
+missing_columns = required_columns - set(df.columns)
+if missing_columns:
+    raise ValueError(
+        f"Faltan columnas obligatorias en el archivo Excel: {sorted(missing_columns)}"
+    )
+
+# Convertir columna Date a formato de fecha
+df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+if df["Date"].isna().any():
+    raise ValueError("Hay valores de fecha inválidos en la columna 'Date'.")
+
+# Ordenar por fechas (en caso de que no esté ordenado)
 df = df.sort_values(by="Date")
 
-#GRÁFICA 1 Precio de Cierre
+# GRÁFICA 1: Precio de Cierre
 plt.figure()
-plt.plot(df["Date"], df["Close/Price"])
+plt.plot(df["Date"], df["Close/Price"], marker="o", linestyle="-")
 plt.title("Evolución del Precio de las acciones de United")
 plt.xlabel("Fecha")
 plt.ylabel("Precio (USD)")
-plt.xticks(rotation=45) 
+plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('grafica1.png')
-# plt.show()
+plt.savefig(script_dir / 'grafica1.png', dpi=300)
+plt.close()
 
-#GRÁFICA 2 Volumen por mes de las acciones de United
-#Crear columna de mes
-df["Month"] =df["Date"].dt.to_period("M")
+# GRÁFICA 2: Volumen por mes de las acciones de United
+# Crear columna de mes
+df["Month"] = df["Date"].dt.to_period("M")
 
-#Agrupar por mes y sumar el volumen
+# Agrupar por mes y sumar el volumen
 volumen_mensual = df.groupby("Month")["Volume"].sum()
 
-#Convertir a string para graficar
-volumen_mensual.index =volumen_mensual.index.astype(str)
+# Convertir a string para graficar
+volumen_mensual.index = volumen_mensual.index.astype(str)
 
 plt.figure()
 plt.bar(volumen_mensual.index, volumen_mensual.values)
@@ -41,5 +61,5 @@ plt.xlabel("Mes")
 plt.ylabel("Volumen")
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('grafica2.png')
-# plt.show()
+plt.savefig(script_dir / 'grafica2.png', dpi=300)
+plt.close()

@@ -1,84 +1,103 @@
-import pandas as pd # type: ignore
-import matplotlib.pyplot as plt # type: ignore
+from pathlib import Path
+import os
 
-#Leer el archivo de excel
-orders = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="Orders")
-people = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="People")
-returns = pd.read_excel("Sample - Superstore archivo en Canvas.xls", sheet_name="Returns")
+import pandas as pd
+import matplotlib.pyplot as plt
 
-#Unir Datos
-#Unir orders con people por Región
-df = pd.merge(orders,people, on="Region")
+script_dir = Path(os.getcwd()) / 'Equipo1'
+excel_path = script_dir / 'Sample - Superstore archivo en Canvas.xls'
+if not excel_path.exists():
+    raise FileNotFoundError(
+        f'No se encontró el archivo de datos: {excel_path}. '
+        'Coloca el archivo en la misma carpeta que este script.'
+    )
 
-#Agregar la columna de Devoluciones
-returns["Returned"] = 1
-df = pd.merge(df,returns, on="Order ID", how="left")
-df["Returned"] = df["Returned"].fillna(0)
+orders = pd.read_excel(excel_path, sheet_name='Orders')
+people = pd.read_excel(excel_path, sheet_name='People')
+returns = pd.read_excel(excel_path, sheet_name='Returns')
 
-#Funciones
+# Unir datos
+# Unir orders con people por Región
+# y luego agregar la información de devoluciones por Order ID
+returns['Returned'] = 1
+
+# Merge orders with people using left join to preserve all sales records
+sales = pd.merge(orders, people, on='Region', how='left')
+
+df = pd.merge(sales, returns[['Order ID', 'Returned']], on='Order ID', how='left')
+df['Returned'] = df['Returned'].fillna(0)
+
 def estadisticas():
-    print("Estadistica descriptiva:")
-    print("Ventas:")
-    print("Media:",orders["Sales"].mean())
-    print("Mediana:",orders["Sales"].median())
-    print("Moda:",orders["Sales"].mode()[0])
-    print("Desviación Estándar:",orders["Sales"].std())
+    print('Estadística descriptiva:')
+    print('Ventas:')
+    print('Media:', orders['Sales'].mean())
+    print('Mediana:', orders['Sales'].median())
+    print('Moda:', orders['Sales'].mode()[0])
+    print('Desviación estándar:', orders['Sales'].std())
 
-    print("Ganancias:")
-    print("Media:",df["Profit"].mean())
-    print("Mediana:",df["Profit"].median())
-    print("Moda:",df["Profit"].mode()[0])
-    print("Desviación Estándar:",df["Profit"].std())
+    print('\nGanancias:')
+    print('Media:', df['Profit'].mean())
+    print('Mediana:', df['Profit'].median())
+    print('Moda:', df['Profit'].mode()[0])
+    print('Desviación estándar:', df['Profit'].std())
+
 
 def grafica_gerente():
-    data = df.groupby("Person")["Profit"].sum()
-    data.plot(kind="bar")
-    plt.title("Ganacia por Gerente")
-    plt.xlabel("Gerente")
-    plt.ylabel("Ganancia")  
+    data = df.groupby('Person')['Profit'].sum()
+    data.plot(kind='bar')
+    plt.title('Ganancia por gerente')
+    plt.xlabel('Gerente')
+    plt.ylabel('Ganancia')
     plt.tight_layout()
-    plt.savefig("ganancia_gerente.png")
-    plt.close()          
-
-def grafica_devoluciones():
-    data = df.groupby("Region")["Returned"].mean()
-    data.plot(kind="bar")
-    plt.title("Porcentaje de Devoluciones por Región")
-    plt.xlabel("Región")
-    plt.ylabel("Proporción de Devolucines")
-    plt.tight_layout()
-    plt.savefig("devoluciones_region.png")
+    plt.savefig(script_dir / 'ganancia_gerente.png')
     plt.close()
 
-def grafica_impacto():
-    data = df.groupby("Returned")["Profit"].mean()
-    data.plot(kind="bar")
-    plt.title("Impacto de Devoluciones en Ganancias")
-    plt.xlabel("Devolución (0=No, 1=Sí")
-    plt.ylabel("Ganancia Promedio")
+
+def grafica_devoluciones():
+    data = df.groupby('Region')['Returned'].mean()
+    data.plot(kind='bar')
+    plt.title('Porcentaje de devoluciones por región')
+    plt.xlabel('Región')
+    plt.ylabel('Proporción de devoluciones')
     plt.tight_layout()
-    plt.savefig("impacto_devoluciones.png")
-    plt.close()   
+    plt.savefig(script_dir / 'devoluciones_region.png')
+    plt.close()
+
+
+def grafica_impacto():
+    data = df.groupby('Returned')['Profit'].mean()
+    data.plot(kind='bar')
+    plt.title('Impacto de devoluciones en ganancias')
+    plt.xlabel('Devolución (0=No, 1=Sí)')
+    plt.ylabel('Ganancia promedio')
+    plt.tight_layout()
+    plt.savefig(script_dir / 'impacto_devoluciones.png')
+    plt.close()
+
 
 def grafica_variabilidad():
-    data = df.groupby("Person")["Sales"].std()
-    data.plot(kind="bar")
-    plt.title("Variabilidad de Ventas por Gerente")
-    plt.xlabel("Gerente")
-    plt.ylabel("Desviación Estándar")
+    data = df.groupby('Person')['Sales'].std()
+    data.plot(kind='bar')
+    plt.title('Variabilidad de ventas por gerente')
+    plt.xlabel('Gerente')
+    plt.ylabel('Desviación estándar')
     plt.tight_layout()
-    plt.savefig("variabilidad_ventas_gerente.png")
-    plt.close()   
+    plt.savefig(script_dir / 'variabilidad_ventas_gerente.png')
+    plt.close()
 
-if __name__ == "__main__":
+
+def simulador():
+    df['Returned_simulado'] = df['Returned'] * 0.9
+    impacto = df.groupby('Returned_simulado')['Profit'].mean()
+    print('\nImpacto simulado de devoluciones (90% de retorno):')
+    print(impacto)
+
+
+if __name__ == '__main__':
     estadisticas()
     grafica_gerente()
     grafica_devoluciones()
     grafica_impacto()
     grafica_variabilidad()
-    print("Gráficas guardadas como PNG.")
-
-#Simulador   
-df["Returned_simulado"] =  df["Returned"] * 0.9
-impacto = df.groupby("Returned_simulado")["Profit"].mean()
-print(impacto)
+    simulador()
+    print('Gráficas guardadas como PNG.')
